@@ -39,6 +39,42 @@ let reservations =
             phone: "12312312",
             email: "jar.kar@gmail.com"
         },
+        {
+            // day: 19,
+            // month: 3,
+            // year: 2020,
+            date_from: new Date(2020,3,20,8,30),
+            date_to: new Date(2020,3,20,8,45),
+            // hour_from: "16:30",
+            // hour_to: "16:45",
+            name: "Jarek Karczewski",
+            phone: "12312312",
+            email: "jar.kar@gmail.com"
+        },
+        {
+            // day: 19,
+            // month: 3,
+            // year: 2020,
+            date_from: new Date(2020,3,16,18,30),
+            date_to: new Date(2020,3,16,18,45),
+            // hour_from: "16:30",
+            // hour_to: "16:45",
+            name: "Jarek Karczewski",
+            phone: "12312312",
+            email: "jar.kar@gmail.com"
+        },
+        {
+            // day: 19,
+            // month: 3,
+            // year: 2020,
+            date_from: new Date(2020,3,13,16,30),
+            date_to: new Date(2020,3,13,16,45),
+            // hour_from: "16:30",
+            // hour_to: "16:45",
+            name: "Jarek Karczewski",
+            phone: "12312312",
+            email: "jar.kar@gmail.com"
+        },
     ];
 
     export default reservations;

@@ -7,14 +7,17 @@ class Calendar extends Component {
     months = ['January','February','March','April','May','Jun','July','August','September','October','November','December'];
 
     state = {
-        current_day: new Date(),
-        
+        current_day: new Date(),        
     }
 
     getReservationsForDate = (d) => {
         var reservations = db_data
-            .filter(r => r.date_from.getDate() === d.getDate() && r.date_from.getMonth() === d.getMonth() + 1 && r.date_from.getFullYear() === d.getFullYear());
-        return reservations;
+            .filter(r => r.date_from.getDate() === d.getDate() && r.date_from.getMonth() === d.getMonth() + 1 && r.date_from.getFullYear() === d.getFullYear())
+            
+        return reservations.sort((date1, date2) => {
+            if (date1.date_from > date2.date_from) return 1;
+            if (date1.date_from < date2.date_from) return -1;
+            return 0;});
     }
 
     nextWeek = () => {
@@ -48,14 +51,14 @@ class Calendar extends Component {
                     <button id="btnNext" onClick={this.nextWeek}>Next</button>
                 </div>
 
-
                 <div className="Calendar">
                     {
                         days.map(d => {
                             let reservations = this.getReservationsForDate(d);
 
+        
                             return (
-                                <div className="Day">
+                                <div className={`Day ${this.isToday(d) ? "CurrentDay" : "" }`}>
                                      {this.days[d.getDay()]} {d.getDate()}
                                     <div className="Reservations">
                                         {
@@ -86,6 +89,13 @@ class Calendar extends Component {
             diff = d.getDate() - day + (day == 0 ? -6 : 1);
         return new Date(d.setDate(diff));
     }
+
+     isToday = (someDate) => {
+        const today = new Date()
+        return someDate.getDate() == today.getDate() &&
+          someDate.getMonth() == today.getMonth() &&
+          someDate.getFullYear() == today.getFullYear()
+      }
 
     render = () => {
         return (
