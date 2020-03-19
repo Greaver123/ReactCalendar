@@ -35,9 +35,9 @@ let reservations =
             date_to: new Date(2020,3,20,16,45),
             // hour_from: "16:30",
             // hour_to: "16:45",
-            name: "Jarek Karczewski",
+            name: "John Doe",
             phone: "12312312",
-            email: "jar.kar@gmail.com"
+            email: "john.doe@gmail.com"
         },
         {
             // day: 19,
@@ -47,9 +47,9 @@ let reservations =
             date_to: new Date(2020,3,20,8,45),
             // hour_from: "16:30",
             // hour_to: "16:45",
-            name: "Jarek Karczewski",
+            name: "John Doe",
             phone: "12312312",
-            email: "jar.kar@gmail.com"
+            email: "john.doe@gmail.com"
         },
         {
             // day: 19,
@@ -59,9 +59,9 @@ let reservations =
             date_to: new Date(2020,3,16,18,45),
             // hour_from: "16:30",
             // hour_to: "16:45",
-            name: "Jarek Karczewski",
+            name: "John Doe",
             phone: "12312312",
-            email: "jar.kar@gmail.com"
+            email: "john.doe@gmail.com"
         },
         {
             // day: 19,
@@ -71,9 +71,9 @@ let reservations =
             date_to: new Date(2020,3,13,16,45),
             // hour_from: "16:30",
             // hour_to: "16:45",
-            name: "Jarek Karczewski",
+            name: "John Doe",
             phone: "12312312",
-            email: "jar.kar@gmail.com"
+            email: "john.doe@gmail.com"
         },
     ];
 
