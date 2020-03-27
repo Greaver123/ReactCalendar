@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { availableAppointments, reservations } from '../db/db_data.js';
+import ReservationDialog from '../ReservationDialog/ReservationDialog.js';
 
 class Calendar extends Component {
 
@@ -10,7 +11,7 @@ class Calendar extends Component {
         current_day: new Date(),
         selected_appointmentId: -1,
         selected_appointment_date: '',
-        input: {name: "Paweł", email: "Kołodziejczyk", phone: "781531306", appointment_id: undefined},
+        reservation_dialog_visible: false,
     }
 
     getReservationsForDate = (d) => {
@@ -32,48 +33,19 @@ class Calendar extends Component {
     }
 
     selectAppointmentWindow = (e) => {
-        if(e.target.classList.contains("Reserved")) return;
+        if (e.target.classList.contains("Reserved")) return;
         let appointmentId = e.target.getAttribute("data-appointment-id");
         this.setState({ selected_appointmentId: appointmentId });
-       
+
         let appointment = this.getAppointmentDate(appointmentId);
         this.setState({ selected_appointment_date: appointment.date_from.toLocaleString() });
-        // change element style to show that its reserved
-    }
 
-    makeReservation = (formInputs) => {        
-       let index = reservations[reservations.length -1].id +1;
-
-       reservations.push(
-           {
-               id: index,
-               name: formInputs.name,
-               email: formInputs.email,
-               phone: formInputs.phone,
-           })
-        
-        availableAppointments.map(a=> {
-            if(a.id == this.state.selected_appointmentId){
-                a.reservation_id = index;
-            }
-
-            return a;
-        })
-
-        this.resetSelectedAppointments();
-    };
-
-    reservationInputChangeHandler = (e) => {
-        let inputValue = e.target.value;
-        let inputAttr = e.target.getAttribute("name");
-        let inputUpdate = {...this.state.input};
-        inputUpdate[inputAttr] = inputValue; 
-        this.setState({input: inputUpdate } );
+        this.setState({ reservation_dialog_visible: true });
     }
 
     resetSelectedAppointments = () => {
-        this.setState({selected_appointmentId: -1});
-        this.setState({selected_appointment_date: ''});
+        this.setState({ selected_appointmentId: -1 });
+        this.setState({ selected_appointment_date: '' });
     }
 
     nextWeek = () => {
@@ -86,6 +58,10 @@ class Calendar extends Component {
         var nextDate = new Date(this.state.current_day);
         this.setState({ current_day: nextDate.setDate(nextDate.getDate() - 7) });
         this.resetSelectedAppointments();
+    }
+
+    closeReservationDialogHandler = () => {
+        this.setState({ reservation_dialog_visible: false });
     }
 
     renderCalendar = (startDate) => {
@@ -110,7 +86,7 @@ class Calendar extends Component {
 
                 <div className="Calendar">
                     {
-                        days.map((d,index) => {
+                        days.map((d, index) => {
                             let reservations = this.getReservationsForDate(d);
 
                             return (
@@ -121,7 +97,7 @@ class Calendar extends Component {
                                             reservations.length !== 0 || reservations.length !== undefined ?
                                                 reservations.map(a => {
                                                     return (
-                                                        <div className={`AppointmentSlot ${a.reservation_id != undefined ? "Reserved": ""} ${a.id == this.state.selected_appointmentId ? "Selected": ""}`} key={a.id} data-appointment-id={`${a.id}`} onClick={this.selectAppointmentWindow}>
+                                                        <div className={`AppointmentSlot ${a.reservation_id != undefined ? "Reserved" : ""} ${a.id == this.state.selected_appointmentId ? "Selected" : ""}`} key={a.id} data-appointment-id={`${a.id}`} onClick={this.selectAppointmentWindow}>
                                                             {a.date_from.getHours()}:{a.date_from.getMinutes() < 10 ? a.date_from.getMinutes().toString() + '0' : a.date_from.getMinutes()}
                                                          -
                                                             {a.date_to.getHours()}:{a.date_to.getMinutes() < 10 ? a.date_to.getMinutes().toString() + '0' : a.date_to.getMinutes()}
@@ -134,32 +110,13 @@ class Calendar extends Component {
                     }
                 </div>
 
-                    
-                    <form className={`ReservationForm ${this.state.selected_appointmentId == undefined || this.state.selected_appointmentId == -1  ? "Hidden" : ""}`} >
-                        <button className="ReservationFormClose" type="button" onClick={this.resetSelectedAppointments}>X</button>
-                        <h3>Reservation</h3>
-
-                        <input hidden={true} name="appointment_id" value={this.state.selected_appointmentId} onChange={this.reservationInputChangeHandler} ></input>
-
-                        <div>
-                            <label>Date</label>
-                            <div id="selectedAppointmentDate">{this.state.selected_appointment_date != undefined ? this.state.selected_appointment_date : ""}</div>
-                        </div>
-                        <div>
-                            <label htmlFor="name">Name</label>
-                            <input name="name" type="text" value={this.state.input.name} onChange={this.reservationInputChangeHandler}></input>
-                        </div>
-                        <div>
-                            <label htmlFor="email">Email</label>
-                            <input name="email" type="text" value={this.state.input.email} onChange={this.reservationInputChangeHandler}></input>
-                        </div>
-                        <div>
-                            <label htmlFor="phone">Phone</label>
-                            <input name="phone" type="text" value={this.state.input.phone} onChange={this.reservationInputChangeHandler}></input>
-                        </div>
-                        <button type="button" onClick={ ()=>{this.makeReservation(this.state.input)} }>Make reservation</button>
-                    </form>
-
+                <ReservationDialog
+                    date={this.state.selected_appointment_date}
+                    appointmentId={this.state.selected_appointmentId}
+                    isVisible={this.state.reservation_dialog_visible}
+                    onClose={this.closeReservationDialogHandler}
+                    onReservation={this.resetSelectedAppointments}
+                />
             </div>
         )
 
