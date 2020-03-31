@@ -1,0 +1,40 @@
+.Calendar{
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .Day{
+    width: 200px;
+    height: auto;
+    text-align: center;
+    font-size: 20px;
+    border: 1px solid black;
+    margin: 20px;
+    /* box-shadow: 5px 5px 10px gainsboro */
+  }
+  
+  .CurrentDay {
+    background-color: gainsboro;
+  }
+  
+  .Appointments{
+    border: 1px solid black;
+    min-height: 50px;
+    margin: 5px;
+  }
+  
+  .Appointment:hover{
+    background-color: gainsboro;
+    cursor: pointer;
+  }
+  
+  /* RESERVATION STATE */
+  .Reserved{
+    background-color: red;
+  }
+  
+  /* SELECTION */
+  .Selected{
+    background-color: gainsboro;
+  }
+  

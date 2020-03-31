@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { availableAppointments, reservations } from '../db/db_data.js';
+import { availableAppointments, reservations } from '../../db/db_data.js';
+import './ReservationDialog.css';
 
 class ReservationDialog extends Component {
 

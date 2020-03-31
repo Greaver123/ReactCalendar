@@ -1,0 +1,65 @@
+/* RESERVATION FORM */
+.ReservationForm{
+    margin-left: 40%;
+    margin-right: 40%;
+    border: 1px solid black;
+    width: 20%;
+    /* margin: 5px; */
+    display: flex;
+    font-size: 20px;
+    flex-direction: column;
+  }
+  
+  .ReservationForm h3{
+    text-align: center;
+    /* border: 1px solid black; */
+    /* margin-bottom: 5px; */
+  }
+  
+  .ReservationForm div{
+    display: flex;
+    flex-direction: column;
+    margin:0px 5px 5px 5px;
+  }
+  
+  .ReservationForm div input{
+    margin:5px;
+    font-size: 20px;
+  }
+  
+  .ReservationForm button{
+    margin: 5px;
+    height: 50px;
+    background: white;
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: inherit;
+  }
+  
+  
+  .ReservationForm button:hover{
+    background-color:gainsboro;
+  }
+  
+  
+  /* TODO Refactor this to get rid of imprtants! */
+  .ReservationFormClose{
+    text-align: center;
+    width: fit-content;
+    height: 20px !important;
+    border: none !important; 
+    font-size: 20px;  
+  }
+  
+  .ReservationFormClose:hover{
+    background-color: white !important;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  
+/* COMMON */
+
+.Hidden{
+    display: none;
+  }

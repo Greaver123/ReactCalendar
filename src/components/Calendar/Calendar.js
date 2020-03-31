@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { availableAppointments, reservations } from '../db/db_data.js';
+import { availableAppointments, reservations } from '../../db/db_data';
 import ReservationDialog from '../ReservationDialog/ReservationDialog.js';
 import ControlsPanel from './ControlsPanel/ControlsPanel.js'
 import Day from './Day/Day.js';
+import './Calendar.css';
 
 class Calendar extends Component {
 
