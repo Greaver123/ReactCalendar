@@ -59,7 +59,7 @@ class ReservationDialog extends Component {
                 <button className="ReservationFormClose" type="button" onClick={this.props.onClose}>X</button>
                 <h3>Reservation</h3>
 
-                <input hidden={true} name="appointment_id" value={this.props.appointmentId} ></input>
+                <input hidden={true} name="appointment_id" value={this.props.appointmentId} readOnly ></input>
 
                 <div>
                     <label>Date</label>

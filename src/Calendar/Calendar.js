@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { availableAppointments, reservations } from '../db/db_data.js';
 import ReservationDialog from '../ReservationDialog/ReservationDialog.js';
+import ControlsPanel from './ControlsPanel/ControlsPanel.js'
+import Day from './Day/Day.js';
 
 class Calendar extends Component {
 
@@ -14,7 +16,7 @@ class Calendar extends Component {
         reservation_dialog_visible: false,
     }
 
-    getReservationsForDate = (d) => {
+    getAppointmentsForDate = (d) => {
         var reservations = availableAppointments
             .filter(r => r.date_from.getDate() === d.getDate() && r.date_from.getMonth() === d.getMonth() + 1 && r.date_from.getFullYear() === d.getFullYear())
 
@@ -52,12 +54,14 @@ class Calendar extends Component {
         var nextDate = new Date(this.state.current_day);
         this.setState({ current_day: nextDate.setDate(nextDate.getDate() + 7) });
         this.resetSelectedAppointments();
+        this.closeReservationDialogHandler();
     }
 
     previousWeek = () => {
         var nextDate = new Date(this.state.current_day);
         this.setState({ current_day: nextDate.setDate(nextDate.getDate() - 7) });
         this.resetSelectedAppointments();
+        this.closeReservationDialogHandler();
     }
 
     closeReservationDialogHandler = () => {
@@ -66,8 +70,9 @@ class Calendar extends Component {
 
     renderCalendar = (startDate) => {
         let current_date = this.getMonday(startDate === undefined ? new Date() : startDate);
-        let days = [];
+        let days = this.getSevenDaysFromDate(current_date);
 
+        //TODO refactor this and move to separate class
         while (days.length < 7) {
             var callendar_day = new Date(current_date);
             days.push(callendar_day);
@@ -76,51 +81,48 @@ class Calendar extends Component {
 
         let calendar = (
             <div className="CalendarWrapper">
-                <div className="CalendarControls">
-                    <button id="btnPrevious" onClick={this.previousWeek}>Previous</button>
-                    <button className="CurrentMonth">
-                        {this.months[current_date.getMonth()]}
-                    </button>
-                    <button id="btnNext" onClick={this.nextWeek}>Next</button>
-                </div>
+
+                <ControlsPanel previousWeek={this.previousWeek} nextWeek={this.nextWeek} currentMonth={this.months[current_date.getMonth()]} />
 
                 <div className="Calendar">
                     {
                         days.map((d, index) => {
-                            let reservations = this.getReservationsForDate(d);
-
-                            return (
-                                <div className={`Day ${this.isToday(d) ? "CurrentDay" : ""}`} key={index}>
-                                    {this.days[d.getDay()]} {d.getDate()}
-                                    <div className="Reservations">
-                                        {
-                                            reservations.length !== 0 || reservations.length !== undefined ?
-                                                reservations.map(a => {
-                                                    return (
-                                                        <div className={`AppointmentSlot ${a.reservation_id != undefined ? "Reserved" : ""} ${a.id == this.state.selected_appointmentId ? "Selected" : ""}`} key={a.id} data-appointment-id={`${a.id}`} onClick={this.selectAppointmentWindow}>
-                                                            {a.date_from.getHours()}:{a.date_from.getMinutes() < 10 ? a.date_from.getMinutes().toString() + '0' : a.date_from.getMinutes()}
-                                                         -
-                                                            {a.date_to.getHours()}:{a.date_to.getMinutes() < 10 ? a.date_to.getMinutes().toString() + '0' : a.date_to.getMinutes()}
-                                                        </div>)
-                                                }) : ""
-                                        }
-                                    </div>
-                                </div>);
+                            let appointments = this.getAppointmentsForDate(d);
+                            let day = this.days[d.getDay()] + " " + d.getDate();
+                            return (<Day
+                                key={index}
+                                header={day}
+                                isToday = {this.isToday(d)}
+                                appointments={appointments} 
+                                selected_appointmentId={this.state.selected_appointmentId} 
+                                onSelected={this.selectAppointmentWindow} 
+                                 />);
                         })
                     }
                 </div>
-
                 <ReservationDialog
-                    date={this.state.selected_appointment_date}
-                    appointmentId={this.state.selected_appointmentId}
-                    isVisible={this.state.reservation_dialog_visible}
-                    onClose={this.closeReservationDialogHandler}
-                    onReservation={this.resetSelectedAppointments}
-                />
+                        date={this.state.selected_appointment_date}
+                        appointmentId={this.state.selected_appointmentId}
+                        isVisible={this.state.reservation_dialog_visible}
+                        onClose={this.closeReservationDialogHandler}
+                        onReservation={this.resetSelectedAppointments}
+                    />
             </div>
         )
 
         return calendar;
+    }
+
+    getSevenDaysFromDate(date) {
+        let days = [];
+
+        while (days.length < 7) {
+            var callendar_day = new Date(date);
+            days.push(callendar_day);
+            date.setDate(date.getDate() + 1);
+        }
+
+        return days;
     }
 
     getMonday(d) {
