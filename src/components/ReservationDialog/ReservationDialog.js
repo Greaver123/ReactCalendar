@@ -10,7 +10,7 @@ class ReservationDialog extends Component {
         phone: "",
     }
 
-    makeReservation = (props) => {
+    CreateReservation = (props) => {
         let index = reservations[reservations.length - 1].id + 1;
 
         reservations.push(
@@ -78,7 +78,7 @@ class ReservationDialog extends Component {
                     <label htmlFor="phone">Phone</label>
                     <input name="phone" type="text" value={this.state.phone} onChange={this.reservationInputChangeHandler}></input>
                 </div>
-                <button type="button" onClick={() => { this.makeReservation(this.state.input) }}>Make reservation</button>
+                <button type="button" onClick={() => { this.CreateReservation(this.state.input) }}>Make reservation</button>
             </form>
         );
 

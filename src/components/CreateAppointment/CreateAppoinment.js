@@ -3,6 +3,7 @@ import classes from './CreateAppointment.module.css';
 import { availableAppointments, reservations } from '../../db/db_data.js';
 
 class CreateAppointment extends Component {
+
     state = {
         date: new Date(),
         availableSlots: [],
@@ -15,8 +16,6 @@ class CreateAppointment extends Component {
     getAvaiableSlotsForDate = (date) => {
 
         date.setMilliseconds(0);
-
-        // console.log(availableAppointments);
 
         let timespan = 15; //appoinment minutes;
         let startDate = new Date(date);
@@ -79,40 +78,52 @@ class CreateAppointment extends Component {
         //TODO 
         e.preventDefault();
 
-        const dateFrom  = new Date();
+        const dateFrom = new Date();
         dateFrom.setTime(this.state.selectedTime);
 
         const dateTo = new Date(dateFrom);
         dateTo.setMinutes(dateTo.getMinutes() + this.state.appointmentTimeSpan);
 
-        const appointment =    {
-            id:this.getLastAppointmentId() + 1,
-            date_from: dateFrom,
-            date_to: dateTo,
-            reservation_id: null, 
+        const appointment = {
+            date_from: dateFrom.getTime(),
+            date_to: dateTo.getTime(),
+            reservation_id: null,
         };
 
-        availableAppointments.push(appointment);
+        console.log("APPOINTMENT");
+        console.log(appointment);
 
-        console.log(availableAppointments);
-
+        fetch("https://react-appointment-app-e7764.firebaseio.com/appointments.json",
+            {
+                method: "POST",
+                body: JSON.stringify(appointment),
+                headers: {
+                    'Content-Type': 'applicaton/json'
+                }
+            })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     getLastAppointmentId = () => {
-        availableAppointments.sort( (a,b)=> {
-            if(a.id < b.id){
+        availableAppointments.sort((a, b) => {
+            if (a.id < b.id) {
                 return -1;
             }
-            else if(a.id > b.id){
+            else if (a.id > b.id) {
                 return 1;
             }
-            else{
+            else {
                 return 0;
             }
         })
 
-        return availableAppointments[availableAppointments.length -1].id;
- 
+        return availableAppointments[availableAppointments.length - 1].id;
+
     }
 
 
